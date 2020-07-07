@@ -99,6 +99,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var clickCount = 0;
 var globalClicks = 0;
+var currectChoices = 0;
 var MAX_CLICKS_ALLOWED = 2;
 var MAX_GLOBAL_CLICKS = 1;
 var previousTileID = null;
@@ -144,6 +145,8 @@ function handleBoardClicks(event) {
 
   if (currentTileID === previousTileID + 2 || currentTileID + 2 === previousTileID) {
     // MATCHED
+    var resultScreen = document.querySelector(".results");
+    resultScreen.innerText = emoji;
     console.log("MATCHED");
     previousTileID = null;
     currentTileID = null;
@@ -167,7 +170,14 @@ function resetBoard() {
 }
 
 function tilesMatched(tileEmoji) {
+  currectChoices++;
   var allTiles = document.querySelectorAll(".tile");
+
+  if (currectChoices === allTiles.length / 2) {
+    console.log("YOU WIN!");
+    win();
+  }
+
   allTiles.forEach(function (tile) {
     if (tile.innerText === tileEmoji) {
       tile.classList.remove("tileHide");
@@ -175,6 +185,23 @@ function tilesMatched(tileEmoji) {
       tile.parentElement.removeEventListener("click", handleBoardClicks);
     }
   });
+}
+
+function win() {
+  var winnerMessage = document.createElement("div");
+  winnerMessage.classList.add("winner");
+  winnerMessage.innerText = "Winner Winner Vegan Dinner!";
+  var theBody = document.querySelector("body");
+  theBody.appendChild(winnerMessage);
+  winnerMessage.addEventListener("click", function () {
+    theBody.removeChild(winnerMessage);
+    restartGame();
+    console.log("RESTARTING!!!");
+  });
+}
+
+function restartGame() {
+  window.location.reload(false);
 }
 
 initBoard();

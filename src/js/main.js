@@ -2,6 +2,7 @@ import shuffledTiles from "./shuffler.js";
 
 let clickCount = 0;
 let globalClicks = 0;
+let currectChoices = 0;
 const MAX_CLICKS_ALLOWED = 2;
 const MAX_GLOBAL_CLICKS = 1;
 let previousTileID = null;
@@ -51,6 +52,8 @@ function handleBoardClicks(event) {
     currentTileID + 2 === previousTileID
   ) {
     // MATCHED
+    const resultScreen = document.querySelector(".results");
+    resultScreen.innerText = emoji;
     console.log("MATCHED");
     previousTileID = null;
     currentTileID = null;
@@ -73,7 +76,12 @@ function resetBoard() {
 }
 
 function tilesMatched(tileEmoji) {
+  currectChoices++;
   const allTiles = document.querySelectorAll(".tile");
+  if (currectChoices === allTiles.length / 2) {
+    console.log("YOU WIN!");
+    win();
+  }
   allTiles.forEach((tile) => {
     if (tile.innerText === tileEmoji) {
       tile.classList.remove("tileHide");
@@ -81,6 +89,23 @@ function tilesMatched(tileEmoji) {
       tile.parentElement.removeEventListener("click", handleBoardClicks);
     }
   });
+}
+
+function win() {
+  const winnerMessage = document.createElement("div");
+  winnerMessage.classList.add("winner");
+  winnerMessage.innerText = "Winner Winner Vegan Dinner!";
+  const theBody = document.querySelector("body");
+  theBody.appendChild(winnerMessage);
+  winnerMessage.addEventListener("click", () => {
+    theBody.removeChild(winnerMessage);
+    restartGame();
+    console.log("RESTARTING!!!");
+  });
+}
+
+function restartGame() {
+  window.location.reload(false);
 }
 
 initBoard();
