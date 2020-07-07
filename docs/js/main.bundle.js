@@ -90,11 +90,179 @@
 /*!************************!*\
   !*** ./src/js/main.js ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-console.log("HELLO FROM MAIN");
-console.log("ARE YOU WORKING CSS");
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _shuffler_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./shuffler.js */ "./src/js/shuffler.js");
+
+var clickCount = 0;
+var globalClicks = 0;
+var MAX_CLICKS_ALLOWED = 2;
+var MAX_GLOBAL_CLICKS = 1;
+var previousTileID = null;
+var currentTileID = null;
+
+function initBoard() {
+  _shuffler_js__WEBPACK_IMPORTED_MODULE_0__["default"].forEach(function (tileObj) {
+    var tileScreen = document.querySelector(".tileScreen");
+    var tileContainer = document.createElement("div");
+    var tile = document.createElement("div");
+    tileContainer.classList.add("tileContainer");
+    tile.classList.add("tile");
+    tile.classList.add("tileHide");
+    tile.setAttribute("id", tileObj.name);
+    tile.innerText = tileObj.emoji;
+    tileContainer.appendChild(tile);
+    tileScreen.appendChild(tileContainer);
+    tileContainer.addEventListener("click", handleBoardClicks);
+  });
+}
+
+function handleBoardClicks(event) {
+  var emoji = event.target.innerText;
+  var tileID = event.target.id;
+
+  if (globalClicks > MAX_GLOBAL_CLICKS) {
+    // stop over clicking STUPID
+    return;
+  }
+
+  clickCount++;
+  globalClicks++;
+  currentTileID = tileID;
+
+  if (clickCount === MAX_CLICKS_ALLOWED) {
+    // reset the board
+    resetBoard();
+    clickCount = 0;
+    currentTileID = null; // resultScreen.innerText = "\u{1F6D1}";
+  }
+
+  currentTileID = tileID;
+
+  if (currentTileID === previousTileID + 2 || currentTileID + 2 === previousTileID) {
+    // MATCHED
+    console.log("MATCHED");
+    previousTileID = null;
+    currentTileID = null;
+    tilesMatched(emoji);
+  }
+
+  event.target.classList.add("tileVisible");
+  previousTileID = currentTileID;
+} // reset all the tiles
+
+
+function resetBoard() {
+  setTimeout(function () {
+    var allTiles = document.querySelectorAll(".tile");
+    allTiles.forEach(function (tile) {
+      tile.classList.remove("tileVisible");
+    });
+    previousTileID = null;
+    globalClicks = 0;
+  }, 1000);
+}
+
+function tilesMatched(tileEmoji) {
+  var allTiles = document.querySelectorAll(".tile");
+  allTiles.forEach(function (tile) {
+    if (tile.innerText === tileEmoji) {
+      tile.classList.remove("tileHide");
+      tile.classList.add("matched");
+      tile.parentElement.removeEventListener("click", handleBoardClicks);
+    }
+  });
+}
+
+initBoard();
+
+/***/ }),
+
+/***/ "./src/js/shuffler.js":
+/*!****************************!*\
+  !*** ./src/js/shuffler.js ***!
+  \****************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _tileAssets_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tileAssets.js */ "./src/js/tileAssets.js");
+
+
+function duplicateTileArray(aTileSet) {
+  var newTileSet = [];
+  aTileSet.forEach(function (tileObject) {
+    newTileSet.push(tileObject);
+    newTileSet.push({
+      name: tileObject.name + "2",
+      emoji: tileObject.emoji
+    });
+  });
+  return newTileSet;
+}
+/* Randomize array in-place using Durstenfeld shuffle algorithm */
+
+
+function DurstenfeldShuffle(array) {
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var _ref = [array[j], array[i]];
+    array[i] = _ref[0];
+    array[j] = _ref[1];
+  }
+
+  return array;
+}
+
+var shuffledTiles = DurstenfeldShuffle(duplicateTileArray(_tileAssets_js__WEBPACK_IMPORTED_MODULE_0__["default"]));
+/* harmony default export */ __webpack_exports__["default"] = (shuffledTiles);
+
+/***/ }),
+
+/***/ "./src/js/tileAssets.js":
+/*!******************************!*\
+  !*** ./src/js/tileAssets.js ***!
+  \******************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = ([{
+  name: "gorilla",
+  emoji: "\uD83E\uDD8D"
+}, {
+  name: "fox",
+  emoji: "\uD83E\uDD8A"
+}, {
+  name: "tiger",
+  emoji: "\uD83D\uDC2F"
+}, {
+  name: "cow",
+  emoji: "\uD83D\uDC2E"
+}, {
+  name: "monkey",
+  emoji: "\uD83D\uDC35"
+}, {
+  name: "llama",
+  emoji: "\uD83E\uDD99"
+}, {
+  name: "panda",
+  emoji: "\uD83D\uDC3C"
+}, {
+  name: "kangroo",
+  emoji: "\uD83E\uDD98"
+}, {
+  name: "eagle",
+  emoji: "\uD83E\uDD85"
+}, {
+  name: "owl",
+  emoji: "\uD83E\uDD89"
+}]);
 
 /***/ })
 
