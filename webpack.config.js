@@ -35,6 +35,10 @@ module.exports = {
       favicon: "favicon.ico",
       template: "src/index.html",
     }),
+    new HtmlWebpackPlugin({
+      filename: "styles/master.css",
+      template: "src/styles/master.css",
+    }),
   ],
   watch: true,
   devtool: "source-map",

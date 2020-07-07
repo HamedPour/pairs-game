@@ -1,0 +1,61 @@
+* {
+  box-sizing: border-box;
+}
+
+.wrapper {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.title {
+  color: purple;
+  font-family: Helvetica, sans-serif;
+  font-weight: 300;
+  text-align: center;
+  margin-top: 40px;
+}
+
+.results {
+  width: 100px;
+  height: 100px;
+  margin: 50px auto;
+  font-size: 3rem;
+  text-align: center;
+}
+
+.tileScreen {
+  border: 3px solid orange;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 450px;
+  margin: 0 auto 0 auto;
+}
+.tileContainer {
+  border: 1px dotted grey;
+  background-color: grey;
+  cursor: pointer;
+  padding: 5px;
+  margin: 5px;
+  user-select: none;
+}
+
+.tileContainer:hover {
+  border: 1px solid gold;
+}
+
+.tile {
+  font-size: 3rem;
+}
+
+.tileHide {
+  opacity: 0;
+}
+
+.tileVisible {
+  opacity: 1;
+}
+
+.matched {
+  background-color: greenyellow;
+}
