@@ -3,6 +3,7 @@ import shuffledTiles from "./shuffler.js";
 let clickCount = 0;
 let globalClicks = 0;
 let currectChoices = 0;
+let playerClicks = 0;
 const MAX_CLICKS_ALLOWED = 2;
 const MAX_GLOBAL_CLICKS = 1;
 let previousTileID = null;
@@ -12,30 +13,47 @@ function initBoard() {
   shuffledTiles.forEach((tileObj) => {
     const tileScreen = document.querySelector(".tileScreen");
     const tileContainer = document.createElement("div");
+    const resultScreen = document.querySelector(".results");
     const tile = document.createElement("div");
-    tileContainer.classList.add("tileContainer");
 
+    // this is for the ? mark at the start of the game
+    resultScreen.innerText = "\u{2754}";
+
+    // all the css classes to style and hide the tiles and containers
+    tileContainer.classList.add("tileContainer");
     tile.classList.add("tile");
     tile.classList.add("tileHide");
+
+    // tile names passed as id attributes to each node.
+    // this is needed for tile comparison later
     tile.setAttribute("id", tileObj.name);
 
+    // tile emojis added to board
     tile.innerText = tileObj.emoji;
 
     tileContainer.appendChild(tile);
     tileScreen.appendChild(tileContainer);
+
+    // Event Listerner attached to each tileContainer
     tileContainer.addEventListener("click", handleBoardClicks);
   });
 }
 
 function handleBoardClicks(event) {
+  /**
+   * Func handles the main game logic
+   */
   const emoji = event.target.innerText;
   const tileID = event.target.id;
   if (globalClicks > MAX_GLOBAL_CLICKS) {
-    // stop over clicking STUPID
+    // This stops over clicking
     return;
   }
   clickCount++;
   globalClicks++;
+  playerClicks++;
+  updatePlayerClicks(playerClicks);
+
   currentTileID = tileID;
 
   if (clickCount === MAX_CLICKS_ALLOWED) {
@@ -43,7 +61,6 @@ function handleBoardClicks(event) {
     resetBoard();
     clickCount = 0;
     currentTileID = null;
-    // resultScreen.innerText = "\u{1F6D1}";
   }
 
   currentTileID = tileID;
@@ -75,6 +92,11 @@ function resetBoard() {
   }, 1000);
 }
 
+function updatePlayerClicks(totalClicksSoFar) {
+  const clickCounter = document.querySelector(".playerClicks");
+  clickCounter.innerText = "Total Clicks: " + totalClicksSoFar;
+}
+
 function tilesMatched(tileEmoji) {
   currectChoices++;
   const allTiles = document.querySelectorAll(".tile");
@@ -93,14 +115,14 @@ function tilesMatched(tileEmoji) {
 
 function win() {
   const winnerMessage = document.createElement("div");
-  winnerMessage.classList.add("winner");
-  winnerMessage.innerText = "Winner Winner Vegan Dinner!";
   const theBody = document.querySelector("body");
+  winnerMessage.classList.add("winner");
+  winnerMessage.innerText =
+    "Winner Winner Chicken Dinner! " + "\n" + "\u{1F3C6}";
   theBody.appendChild(winnerMessage);
   winnerMessage.addEventListener("click", () => {
     theBody.removeChild(winnerMessage);
     restartGame();
-    console.log("RESTARTING!!!");
   });
 }
 

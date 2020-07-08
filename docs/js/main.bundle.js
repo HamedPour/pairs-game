@@ -100,6 +100,7 @@ __webpack_require__.r(__webpack_exports__);
 var clickCount = 0;
 var globalClicks = 0;
 var currectChoices = 0;
+var playerClicks = 0;
 var MAX_CLICKS_ALLOWED = 2;
 var MAX_GLOBAL_CLICKS = 1;
 var previousTileID = null;
@@ -109,36 +110,49 @@ function initBoard() {
   _shuffler_js__WEBPACK_IMPORTED_MODULE_0__["default"].forEach(function (tileObj) {
     var tileScreen = document.querySelector(".tileScreen");
     var tileContainer = document.createElement("div");
-    var tile = document.createElement("div");
+    var resultScreen = document.querySelector(".results");
+    var tile = document.createElement("div"); // this is for the ? mark at the start of the game
+
+    resultScreen.innerText = "\u2754"; // all the css classes to style and hide the tiles and containers
+
     tileContainer.classList.add("tileContainer");
     tile.classList.add("tile");
-    tile.classList.add("tileHide");
-    tile.setAttribute("id", tileObj.name);
+    tile.classList.add("tileHide"); // tile names passed as id attributes to each node.
+    // this is needed for tile comparison later
+
+    tile.setAttribute("id", tileObj.name); // tile emojis added to board
+
     tile.innerText = tileObj.emoji;
     tileContainer.appendChild(tile);
-    tileScreen.appendChild(tileContainer);
+    tileScreen.appendChild(tileContainer); // Event Listerner attached to each tileContainer
+
     tileContainer.addEventListener("click", handleBoardClicks);
   });
 }
 
 function handleBoardClicks(event) {
+  /**
+   * Func handles the main game logic
+   */
   var emoji = event.target.innerText;
   var tileID = event.target.id;
 
   if (globalClicks > MAX_GLOBAL_CLICKS) {
-    // stop over clicking STUPID
+    // This stops over clicking
     return;
   }
 
   clickCount++;
   globalClicks++;
+  playerClicks++;
+  updatePlayerClicks(playerClicks);
   currentTileID = tileID;
 
   if (clickCount === MAX_CLICKS_ALLOWED) {
     // reset the board
     resetBoard();
     clickCount = 0;
-    currentTileID = null; // resultScreen.innerText = "\u{1F6D1}";
+    currentTileID = null;
   }
 
   currentTileID = tileID;
@@ -169,6 +183,11 @@ function resetBoard() {
   }, 1000);
 }
 
+function updatePlayerClicks(totalClicksSoFar) {
+  var clickCounter = document.querySelector(".playerClicks");
+  clickCounter.innerText = "Total Clicks: " + totalClicksSoFar;
+}
+
 function tilesMatched(tileEmoji) {
   currectChoices++;
   var allTiles = document.querySelectorAll(".tile");
@@ -189,14 +208,13 @@ function tilesMatched(tileEmoji) {
 
 function win() {
   var winnerMessage = document.createElement("div");
-  winnerMessage.classList.add("winner");
-  winnerMessage.innerText = "Winner Winner Vegan Dinner!";
   var theBody = document.querySelector("body");
+  winnerMessage.classList.add("winner");
+  winnerMessage.innerText = "Winner Winner Chicken Dinner! " + "\n" + "\uD83C\uDFC6";
   theBody.appendChild(winnerMessage);
   winnerMessage.addEventListener("click", function () {
     theBody.removeChild(winnerMessage);
     restartGame();
-    console.log("RESTARTING!!!");
   });
 }
 

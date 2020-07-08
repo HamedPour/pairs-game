@@ -3,29 +3,16 @@
 }
 
 .wrapper {
+  font-family: Helvetica, sans-serif;
   max-width: 960px;
   margin: 0 auto;
-  background-color: #000;
   height: 90vh;
 }
 
 .title {
-  font-family: Helvetica, sans-serif;
   font-weight: 300;
   text-align: center;
-  padding-top: 40px;
-  margin-top: 40px;
-  color: #fff;
-}
-
-.techy {
-  font-family: Helvetica, sans-serif;
-  text-align: center;
-  color: #fff;
-}
-.techy2 {
-  color: #fff;
-  text-align: center;
+  margin-top: 80px;
 }
 
 .results {
@@ -41,12 +28,13 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 450px;
+  max-width: 450px;
   margin: 0 auto 0 auto;
 }
+
 .tileContainer {
-  border: 1px dotted grey;
-  background-color: lightgrey;
+  border: 1px solid #000;
+  background-color: grey;
   cursor: pointer;
   padding: 5px;
   margin: 5px;
@@ -71,6 +59,13 @@
 
 .matched {
   background-color: greenyellow;
+}
+
+.playerClicks {
+  font-size: 2rem;
+  margin-top: 40px;
+  text-align: center;
+  font-weight: 300;
 }
 
 .winner {
